@@ -173,5 +173,6 @@ Example structure:
 }
 
 ```
+---
 
 **LICENSE:** [Apache License 2.0](https://github.com/Abdullah9779/Dotcoder/blob/main/LICENSE)
