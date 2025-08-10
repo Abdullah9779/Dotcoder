@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- ✅ Primary Meta Tags -->
+    <title>Verify Email – Complete Your DotCoder Account Setup</title>
+    <meta name="title" content="Verify Email – Complete Your DotCoder Account Setup">
+    <meta name="description" content="Verify your email address to complete your DotCoder account setup and start building websites with AI. Quick and secure verification process.">
+    <meta name="keywords" content="DotCoder verify email, email verification, account setup, AI website builder, complete registration, secure account">
+    <meta name="author" content="DotCoder Team">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- ✅ Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://dotcoder.site/verify-email">
+    <meta property="og:title" content="Verify Email – Complete Your DotCoder Account Setup">
+    <meta property="og:description" content="Complete your DotCoder account setup by verifying your email address.">
+    <meta property="og:image" content="https://dotcoder.site/static/icons/dotcoder-logo.png">
+
+    <!-- ✅ Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://dotcoder.site/verify-email">
+    <meta property="twitter:title" content="Verify Email – Complete DotCoder Setup">
+    <meta property="twitter:description" content="Verify your email to start building websites with AI.">
+    <meta property="twitter:image" content="https://dotcoder.site/static/icons/dotcoder-logo.png">
+
+    <!-- ✅ Favicon -->
+    <link rel="icon" href="/static/icons/dotcoder-logo.png" type="image/png">
+    
+    <!-- ✅ PWA Manifest -->
+    <link rel="manifest" href="/static/manifest.json">
+    <meta name="theme-color" content="#6366f1">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // Configure Tailwind CSS for dark mode
+        tailwind.config = {
+            darkMode: 'class'
+        }
+    </script>
+    <script>
+        // Initialize theme immediately to prevent flash
+        (function() {
+            const savedTheme = localStorage.getItem('theme');
+            const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            
+            if (savedTheme === 'dark' || (!savedTheme && systemPrefersDark)) {
+                document.documentElement.classList.add('dark');
+            }
+        })();
+    </script>
+    <style>
+        /* Logo styles */
+        .logo-gradient {
+            background: linear-gradient(45deg, #6366f1, #3b82f6, #0ea5e9);
+            background-size: 200% 200%;
+            animation: gradient-x 8s ease infinite;
+        }
+        .dark .logo-gradient {
+            background: linear-gradient(45deg, #818cf8, #60a5fa, #38bdf8);
+            background-size: 200% 200%;
+            animation: gradient-x 8s ease infinite;
+        }
+        .gradient-text {
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+        @keyframes gradient-x {
+            0%, 100% {
+                background-size: 200% 200%;
+                background-position: left center;
+            }
+            50% {
+                background-size: 200% 200%;
+                background-position: right center;
+            }
+        }
+        .logo-circle {
+            fill: url(#logo-gradient);
+        }
+        
+        /* Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+        
+        /* Pulse animation for email icon */
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        .animate-pulse {
+            animation: pulse 2s infinite;
+        }
+    </style>
+    <link rel="icon" type="image/png" href="/static/icons/dotcoder-logo.png">
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 min-h-screen flex items-center justify-center p-4">
+    <div class="max-w-md w-full mx-auto">
+        <!-- Logo and Header -->
+        <div class="text-center mb-8 animate-fade-in" style="animation-delay: 0.1s">
+            <div class="flex items-center justify-center gap-3 mb-4">
+                <a href="/" class="flex items-center gap-3 group">
+                    <div class="logo-gradient w-10 h-10 rounded-full flex items-center justify-center font-extrabold text-xl text-black dark:text-white group-hover:opacity-80 transition">
+                        DC
+                    </div>
+                    <span class="text-xl font-bold"><span class="text-black dark:text-white">Dot</span><span class="gradient-text bg-gradient-to-r from-indigo-500 via-blue-500 to-sky-500 dark:from-indigo-400 dark:via-blue-400 dark:to-sky-400">Coder</span></span>
+                </a>
+            </div>
+        </div>
+        
+        <!-- Verification Card -->
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 p-6 sm:p-8 animate-fade-in" style="animation-delay: 0.2s">
+            <div class="text-center">
+                <!-- Email Icon -->
+                <div class="mx-auto w-20 h-20 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center mb-6 animate-pulse">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                        <polyline points="22,6 12,13 2,6"></polyline>
+                    </svg>
+                </div>
+                
+                <h2 class="text-xl font-semibold text-gray-800 dark:text-white mb-2">Verify your email address</h2>
+                <p class="text-gray-600 dark:text-gray-400 mb-6">
+                    We've sent a verification link to <span class="font-medium text-gray-800 dark:text-white">user@example.com</span>. 
+                    Please check your inbox and click the link to verify your account.
+                </p>
+                
+                <!-- Action Buttons -->
+                <div class="space-y-3">
+                    <a href="https://mail.google.com" target="_blank" class="w-full flex items-center justify-center px-4 py-3 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                        <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.273H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-2.023 2.309-3.178 3.927-1.964L5.455 4.64 12 9.548l6.545-4.91 1.528-1.145C21.69 2.28 24 3.434 24 5.457z"/>
+                        </svg>
+                        Go to Gmail
+                    </a>
+                    
+                    <a href="/sign-in" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 text-center block">
+                        Go to Sign In
+                    </a>
+
+                </div>
+                
+                <p class="mt-6 text-sm text-gray-500 dark:text-gray-400">
+                    Didn't receive the email? Check your spam folder or 
+                    <a href="/get-verify-email-link" class="font-medium text-blue-600 dark:text-blue-400 hover:underline">Get New one</a>.
+                </p>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="text-center mt-6 animate-fade-in" style="animation-delay: 0.3s">
+            <p class="text-sm text-gray-500 dark:text-gray-400">
+                © 2025s DotCoder. All rights reserved.
+            </p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Theme switcher (consistent with main page)
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            const savedTheme = localStorage.getItem('theme');
+            
+            if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+                document.documentElement.classList.add('dark');
+            }
+            
+            // Resend email functionality
+            const resendButton = document.querySelector('button');
+            if (resendButton) {
+                resendButton.addEventListener('click', function() {
+                    // Here you would typically call your backend to resend the verification email
+                    // For demonstration, we'll just show an alert
+                    alert('Verification email resent! Please check your inbox.');
+                    
+                    // Disable button for 60 seconds to prevent spamming
+                    this.disabled = true;
+                    this.textContent = 'Email sent! Wait 60 seconds';
+                    
+                    setTimeout(() => {
+                        this.disabled = false;
+                        this.textContent = 'Resend Verification Email';
+                    }, 60000);
+                });
+            }
+        });
+    </script>
+    
+    <!-- Service Worker Registration -->
+    <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function() {
+        navigator.serviceWorker.register('/static/sw.js').then(function(registration) {
+          console.log('ServiceWorker registration successful with scope: ', registration.scope);
+        }, function(err) {
+          console.log('ServiceWorker registration failed: ', err);
+        });
+      });
+    }
+    </script>
+</body>
+</html>

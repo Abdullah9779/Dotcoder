@@ -1,0 +1,1483 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <!-- ✅ Primary Meta Tags -->
+    <title>DotCoder Chat  – AI Web Code Generator & Live Builder</title>
+    <meta name="title" content="DotCoder Chat – AI Web Code Generator & Live Builder">
+    <meta name="description" content="Chat with AI to generate HTML, Tailwind, React, and JavaScript code. Build websites live in real-time. Perfect for beginners and developers. No setup required.">
+    <meta name="keywords" content="AI chat code generator, prompt to code, prompt to website, AI coding interface, HTML generator, Tailwind CSS builder, React JS code, live preview, website builder AI, DotCoder chat, build website with AI">
+    <meta name="author" content="DotCoder Team">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
+    <!-- ✅ Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://dotcoder.site/chat">
+    <meta property="og:title" content="DotCoder Chat – Build Websites With AI in Real-Time">
+    <meta property="og:description" content="Use AI to chat and generate your full website. Live preview with HTML, Tailwind CSS, React, and JS output.">
+    <meta property="og:image" content="https://dotcoder.site/static/icons/dotcoder-logo.png">
+
+    <!-- ✅ Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://dotcoder.site/chat">
+    <meta property="twitter:title" content="DotCoder Chat – Real-Time Website Generator">
+    <meta property="twitter:description" content="AI-powered chat that turns prompts into websites and code instantly. Beginner-friendly & fast.">
+    <meta property="twitter:image" content="https://dotcoder.site/static/icons/dotcoder-logo.png">
+
+    <!-- ✅ Favicon -->
+    <link rel="icon" href="/static/icons/dotcoder-logo.png" type="image/png">
+
+    <!-- 🧠 JSON‑LD Structured Data (WebApplication – Chat Builder Page) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "DotCoder Chat Interface",
+      "operatingSystem": "All",
+      "applicationCategory": "DeveloperApplication",
+      "url": "https://dotcoder.site/chat",
+      "image": "https://dotcoder.site/static/icons/dotcoder-logo.png",
+      "description": "Chat with DotCoder AI to generate complete website code using HTML, Tailwind CSS, React, and JavaScript. Features live preview and instant code generation.",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "creator": {
+        "@type": "Organization",
+        "name": "DotCoder Team"
+      }
+    }
+    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // Configure Tailwind CSS for dark mode
+        tailwind.config = {
+            darkMode: 'class'
+        }
+    </script>
+    <script>
+        // Initialize theme immediately to prevent flash
+        (function() {
+            const savedTheme = localStorage.getItem('theme');
+            const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            
+            if (savedTheme === 'dark' || (!savedTheme && systemPrefersDark)) {
+                document.documentElement.classList.add('dark');
+            }
+        })();
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <!-- Add to <head> for code highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => { 
+            if (window.hljs) hljs.highlightAll();
+            
+            // Scroll chat to bottom on page load
+            const chatContainer = document.getElementById('chat-container');
+            if (chatContainer) {
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+            }
+            
+            // Simple observer for new messages
+            const observer = new MutationObserver(() => {
+                if (chatContainer) {
+                    chatContainer.scrollTop = chatContainer.scrollHeight;
+                }
+            });
+            
+            if (chatContainer) {
+                observer.observe(chatContainer, { childList: true, subtree: true });
+            }
+        });
+    </script>
+    <style>
+        /* Logo styles */
+        .logo-gradient {
+            background: linear-gradient(45deg, #6366f1, #3b82f6, #0ea5e9);
+            background-size: 200% 200%;
+            animation: gradient-x 8s ease infinite;
+        }
+        .dark .logo-gradient {
+            background: linear-gradient(45deg, #818cf8, #60a5fa, #38bdf8);
+            background-size: 200% 200%;
+            animation: gradient-x 8s ease infinite;
+        }
+        .gradient-text {
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+        @keyframes gradient-x {
+            0%, 100% {
+                background-size: 200% 200%;
+                background-position: left center;
+            }
+            50% {
+                background-size: 200% 200%;
+                background-position: right center;
+            }
+        }
+        .logo-circle {
+            fill: url(#logo-gradient);
+        }
+        
+        /* Form styles */
+        .form-container {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+        }
+        .dark .form-container {
+            background: rgba(31, 41, 55, 0.9);
+        }
+        
+        /* Input styles */
+        .input-field {
+            transition: all 0.3s ease;
+        }
+        .input-field:focus {
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.3);
+        }
+        .dark .input-field {
+            background-color: #374151;
+            border-color: #4b5563;
+        }
+        
+        /* Button styles */
+        .btn-primary {
+            background: linear-gradient(135deg, #6366f1 0%, #3b82f6 100%);
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #4f46e5 0%, #2563eb 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .dark .btn-primary:hover {
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* Social buttons */
+        .btn-social {
+            transition: all 0.3s ease;
+        }
+        .btn-social:hover {
+            transform: translateY(-1px);
+        }
+        
+        /* Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+        
+        /* Remember me checkbox */
+        .checkbox-container {
+            position: relative;
+            padding-left: 28px;
+            cursor: pointer;
+        }
+        .checkbox-container input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 0;
+            width: 0;
+        }
+        .checkmark {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 20px;
+            width: 20px;
+            background-color: #fff;
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+        }
+        .dark .checkmark {
+            background-color: #374151;
+            border-color: #4b5563;
+        }
+        .checkbox-container:hover input ~ .checkmark {
+            border-color: #6366f1;
+        }
+        .checkbox-container input:checked ~ .checkmark {
+            background-color: #6366f1;
+            border-color: #6366f1;
+        }
+        .checkmark:after {
+            content: "";
+            position: absolute;
+            display: none;
+        }
+        .checkbox-container input:checked ~ .checkmark:after {
+            display: block;
+        }
+        .checkbox-container .checkmark:after {
+            left: 7px;
+            top: 3px;
+            width: 5px;
+            height: 10px;
+            border: solid white;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+        }
+
+        /* Chat specific styles */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #6366f1 30%, #3b82f6 100%);
+            border-radius: 6px;
+            transition: background 0.3s;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #6366f1 10%, #0ea5e9 100%);
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+        .animate-pulse {
+            animation: pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        /* Message bubbles */
+        .user-message {
+            background: linear-gradient(135deg, #6366f1 0%, #3b82f6 100%);
+            color: #fff;
+            border-radius: 1.25rem 1.25rem 0.5rem 1.25rem;
+            box-shadow: 0 4px 16px 0 rgba(59,130,246,0.10);
+            border: 1.5px solid #6366f1;
+            font-weight: 500;
+            letter-spacing: 0.01em;
+            transition: box-shadow 0.2s;
+        }
+        .user-message:hover {
+            box-shadow: 0 8px 24px 0 rgba(59,130,246,0.18);
+        }
+        .assistant-message {
+            background: linear-gradient(135deg, #f3f4f6 60%, #e0e7ef 100%);
+            color: #111827;
+            border-radius: 1.25rem 1.25rem 1.25rem 0.5rem;
+            box-shadow: 0 2px 12px 0 rgba(31,41,55,0.06);
+            border: 1.5px solid #e0e7ef;
+            font-weight: 500;
+            letter-spacing: 0.01em;
+            transition: box-shadow 0.2s;
+        }
+        .assistant-message:hover {
+            box-shadow: 0 8px 24px 0 rgba(31,41,55,0.10);
+        }
+        .dark .assistant-message {
+            background: linear-gradient(135deg, #374151 60%, #212121 100%);
+            color: #f9fafb;
+            border: 1.5px solid #374151;
+        }
+
+        /* Modal styles */
+        .modal-overlay {
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(6px) saturate(180%);
+        }
+        .modal-content {
+            animation: modalFadeIn 0.3s cubic-bezier(0.4,0,0.2,1);
+            box-shadow: 0 8px 40px 0 rgba(59,130,246,0.10), 0 1.5px 4px 0 rgba(0,0,0,0.02);
+            border-radius: 1.5rem;
+            border: 1.5px solid #e0e7ef;
+        }
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(24px) scale(0.97);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+    </style>
+    <meta name="theme-color" content="#0d6efd">
+    <link rel="manifest" href="/static/manifest.json">
+    <link rel="icon" type="image/png" href="/static/icons/dotcoder-logo.png">
+</head>
+
+<body class="bg-gray-50 dark:bg-gray-900 min-h-screen h-screen w-screen overflow-hidden">
+    <div id="main-content" class="flex flex-col h-full max-w-7xl w-full mx-auto p-4 gap-4 transition-all duration-300">
+        <!-- Header with Logo -->
+        <div class="flex items-center justify-between">
+            <div class="relative flex items-center gap-3">
+                <a href="/" class="flex items-center gap-3 group">
+                    <div class="logo-gradient w-10 h-10 rounded-full flex items-center justify-center font-extrabold text-xl text-black dark:text-white group-hover:opacity-80 transition">
+                        DC
+                    </div>
+                    <span class="text-xl font-bold"><span class="text-black dark:text-white">Dot</span><span class="gradient-text bg-gradient-to-r from-indigo-500 via-blue-500 to-sky-500 dark:from-indigo-400 dark:via-blue-400 dark:to-sky-400">Coder</span></span>
+                </a>
+            </div>
+            <button id="settings-button" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 15.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7z"></path>
+                  <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82c.24.52.75.85 1.32.9H21a2 2 0 1 1 0 4h-.09c-.57.05-1.08.38-1.32.9z"></path>
+                </svg>
+              </button>              
+        </div>
+
+        <!-- Chat container -->
+        <div id="chat-container" class="flex-1 overflow-y-auto custom-scrollbar space-y-4 p-2">
+            <!-- Welcome message -->
+            <div class="animate-fade-in flex gap-3">
+                <div
+                    class="flex-shrink-0 h-8 w-8 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold">
+                    AI
+                </div>
+                <div class="assistant-message px-4 py-3 max-w-[80%]">
+                    <p>Hello! I'm your AI assistant. How can I help you today?</p>
+                    <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                        Today at <span class="time"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Prompt box -->
+        <div id="prompt-box-container" class="w-full pb-10 pt-4 flex justify-center">
+            <div class="form-container relative max-w-2xl w-full mx-auto rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 p-2 flex flex-col gap-2">
+                <div class="relative flex flex-col gap-0 overflow-hidden">
+                    <div class="relative p-0 m-0">
+                        <textarea
+                            id="message-input"
+                            rows="1"
+                            placeholder="Ask DotCoder..."
+                            class="input-field w-full block rounded-t-xl border-none !border-0 outline-none focus:outline-none focus:ring-0 focus:border-0 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 text-base font-medium transition-all shadow-none resize-none mb-0"
+                            style="min-height:48px; max-height:164px; margin:0; padding:16px 16px 0 16px; border:0 !important; border-width:0 !important; border-style:none !important; border-color:transparent !important; box-shadow:none !important; outline:none !important;"
+                        ></textarea>
+                    </div>
+                    <div class="h-14 bg-gray-50 dark:bg-gray-800 rounded-b-xl flex items-end relative mt-0 -mt-px border-none pt-0">
+                        <div class="absolute left-4 bottom-3 flex items-center gap-2">
+                            <label id="attach-label" class="cursor-pointer relative rounded-full p-2 bg-gray-100 dark:bg-gray-700 border border-transparent text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors shadow-sm">
+                                <input type="file" id="file-input" class="hidden" />
+                                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-5 h-5"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48" stroke="#888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                <div id="file-preview-container" class="absolute w-[100px] h-[100px] top-14 -left-4 z-10"></div>
+                            </label>
+                        </div>
+                        <div class="absolute right-4 bottom-3 flex gap-2">
+                            <button id="microphone-button" type="button" class="rounded-full p-3 transition-colors bg-gray-200 text-gray-700 shadow-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 disabled:opacity-50 disabled:cursor-not-allowed" title="Speak">
+                                <svg id="microphone-icon" fill="#555" width="22" height="22" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M19,11 C19.5522847,11 20,11.4477153 20,12 C20,16.0792885 16.9468043,19.445465 13.0009551,19.9379871 L13,21 C13,21.5522847 12.5522847,22 12,22 C11.4477153,22 11,21.5522847 11,21 L11.0000487,19.9381123 C7.05371356,19.4460359 4,16.0796344 4,12 C4,11.4477153 4.44771525,11 5,11 C5.55228475,11 6,11.4477153 6,12 C6,15.3137085 8.6862915,18 12,18 C15.3137085,18 18,15.3137085 18,12 C18,11.4477153 18.4477153,11 19,11 Z M12,2 C14.209139,2 16,3.790861 16,6 L16,12 C16,14.209139 14.209139,16 12,16 C9.790861,16 8,14.209139 8,12 L8,6 C8,3.790861 9.790861,2 12,2 Z M12,4 C10.8954305,4 10,4.8954305 10,6 L10,12 C10,13.1045695 10.8954305,14 12,14 C13.1045695,14 14,13.1045695 14,12 L14,6 C14,4.8954305 13.1045695,4 12,4 Z"/></svg>
+                            </button>
+                            <button id="enhance-prompt-button" type="button" class="btn-primary rounded-full p-3 transition-colors text-white shadow-md hover:bg-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-400 disabled:opacity-50 disabled:cursor-not-allowed" title="Enhance Prompt">
+                                <svg fill="#fff" width="22" height="22" viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg"><path d="M 26.6875 12.6602 C 26.9687 12.6602 27.1094 12.4961 27.1797 12.2383 C 27.9062 8.3242 27.8594 8.2305 31.9375 7.4570 C 32.2187 7.4102 32.3828 7.2461 32.3828 6.9648 C 32.3828 6.6836 32.2187 6.5195 31.9375 6.4726 C 27.8828 5.6524 28.0000 5.5586 27.1797 1.6914 C 27.1094 1.4336 26.9687 1.2695 26.6875 1.2695 C 26.4062 1.2695 26.2656 1.4336 26.1953 1.6914 C 25.3750 5.5586 25.5156 5.6524 21.4375 6.4726 C 21.1797 6.5195 20.9922 6.6836 20.9922 6.9648 C 20.9922 7.2461 21.1797 7.4102 21.4375 7.4570 C 25.5156 8.2774 25.4687 8.3242 26.1953 12.2383 C 26.2656 12.4961 26.4062 12.6602 26.6875 12.6602 Z M 15.3438 28.7852 C 15.7891 28.7852 16.0938 28.5039 16.1406 28.0821 C 16.9844 21.8242 17.1953 21.8242 23.6641 20.5821 C 24.0860 20.5117 24.3906 20.2305 24.3906 19.7852 C 24.3906 19.3633 24.0860 19.0586 23.6641 18.9883 C 17.1953 18.0977 16.9609 17.8867 16.1406 11.5117 C 16.0938 11.0899 15.7891 10.7852 15.3438 10.7852 C 14.9219 10.7852 14.6172 11.0899 14.5703 11.5352 C 13.7969 17.8164 13.4687 17.7930 7.0469 18.9883 C 6.6250 19.0821 6.3203 19.3633 6.3203 19.7852 C 6.3203 20.2539 6.6250 20.5117 7.1406 20.5821 C 13.5156 21.6133 13.7969 21.7774 14.5703 28.0352 C 14.6172 28.5039 14.9219 28.7852 15.3438 28.7852 Z M 31.2344 54.7305 C 31.8438 54.7305 32.2891 54.2852 32.4062 53.6524 C 34.0703 40.8086 35.8750 38.8633 48.5781 37.4570 C 49.2344 37.3867 49.6797 36.8945 49.6797 36.2852 C 49.6797 35.6758 49.2344 35.2070 48.5781 35.1133 C 35.8750 33.7070 34.0703 31.7617 32.4062 18.9180 C 32.2891 18.2852 31.8438 17.8633 31.2344 17.8633 C 30.6250 17.8633 30.1797 18.2852 30.0860 18.9180 C 28.4219 31.7617 26.5938 33.7070 13.9140 35.1133 C 13.2344 35.2070 12.7891 35.6758 12.7891 36.2852 C 12.7891 36.8945 13.2344 37.3867 13.9140 37.4570 C 26.5703 39.1211 28.3281 40.8321 30.0860 53.6524 C 30.1797 54.2852 30.6250 54.7305 31.2344 54.7305 Z"/></svg>
+                            </button>
+                            <button id="send-button" type="button" class="btn-primary rounded-full p-3 transition-colors text-white shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-5 h-5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settings-modal" class="fixed inset-0 z-50 flex items-center justify-center hidden">
+        <div class="modal-overlay absolute inset-0"></div>
+        <div class="form-container modal-content relative rounded-xl shadow-xl w-full max-w-md max-h-[90vh] overflow-y-auto">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-xl font-bold text-gray-900 dark:text-white">Settings</h2>
+                    <button id="close-settings" class="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+                
+                <div class="space-y-6">
+                    <!-- Theme Selection -->
+                    <div>
+                        <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">Appearance</h3>
+                        <div class="space-y-2">
+                            <div class="flex items-center">
+                                <input id="light-theme" name="theme" type="radio" class="h-4 w-4 border-gray-300 text-blue-600 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700">
+                                <label for="light-theme" class="ml-3 block text-sm font-medium text-gray-700 dark:text-gray-300">Light Mode</label>
+                            </div>
+                            <div class="flex items-center">
+                                <input id="dark-theme" name="theme" type="radio" class="h-4 w-4 border-gray-300 text-blue-600 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700">
+                                <label for="dark-theme" class="ml-3 block text-sm font-medium text-gray-700 dark:text-gray-300">Dark Mode</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Advanced Settings -->
+                    <div class="border-t border-gray-200 dark:border-gray-700 pt-4">
+                        <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">Advanced</h3>
+                        <div class="space-y-3">
+                            <div class="flex items-center justify-between">
+                                <label for="code-auto-run" class="text-sm font-medium text-gray-700 dark:text-gray-300">Auto-run HTML preview</label>
+                                <input type="checkbox" id="code-auto-run" class="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Save/Cancel Buttons -->
+                    <div class="flex justify-end space-x-3 pt-4">
+                        <button id="cancel-settings" type="button" class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 rounded-md hover:bg-gray-200 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            Cancel
+                        </button>
+                        <button id="save-settings" type="button" class="btn-primary px-4 py-2 text-sm font-medium text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            Save Changes
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal container (outside React's scope) -->
+    <div id="live-modal-container" style="position: fixed; z-index: 9999;"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const chatContainer = document.getElementById('chat-container');
+            const messageInput = document.getElementById('message-input');
+            const sendButton = document.getElementById('send-button');
+            const settingsButton = document.getElementById('settings-button');
+            const settingsModal = document.getElementById('settings-modal');
+            const closeSettings = document.getElementById('close-settings');
+            const cancelSettings = document.getElementById('cancel-settings');
+            const saveSettings = document.getElementById('save-settings');
+            const temperatureSlider = document.getElementById('temperature');
+            const temperatureValue = document.getElementById('temperature-value');
+            let conversation = [];
+            let currentPreviewCode = '';
+
+            // Set current time in welcome message
+            document.querySelector('.time').textContent = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+            // Auto-resize textarea
+            messageInput.addEventListener('input', function () {
+                this.style.height = 'auto';
+                this.style.height = Math.min(this.scrollHeight, 128) + 'px';
+
+                // Enable/disable send button based on input
+                sendButton.disabled = this.value.trim() === '';
+            });
+
+            // Send message on Enter (but allow Shift+Enter for new lines)
+            messageInput.addEventListener('keydown', function (e) {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    sendMessage();
+                }
+            });
+
+            // Send button click handler
+            sendButton.addEventListener('click', sendMessage);
+
+            // Settings button click handler
+            settingsButton.addEventListener('click', function() {
+                // If HTML preview sidebar is open, move settings modal inside it
+                const sidebar = document.getElementById('html-preview-sidebar');
+                if (sidebar) {
+                    sidebar.appendChild(settingsModal);
+                } else {
+                    document.body.appendChild(settingsModal);
+                }
+                settingsModal.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            });
+            
+            // Close settings modal handlers
+            function closeSettingsModal() {
+                settingsModal.classList.add('hidden');
+                document.body.style.overflow = '';
+            }
+            
+            closeSettings.addEventListener('click', closeSettingsModal);
+            cancelSettings.addEventListener('click', closeSettingsModal);
+            
+            // Click outside modal to close
+            settingsModal.addEventListener('click', function(e) {
+                if (e.target === settingsModal) {
+                    closeSettingsModal();
+                }
+            });
+            
+            // Save settings handler
+            saveSettings.addEventListener('click', function() {
+                // Save theme
+                const selectedTheme = document.querySelector('input[name="theme"]:checked').id;
+                if (selectedTheme === 'light-theme') {
+                    localStorage.setItem('theme', 'light');
+                } else if (selectedTheme === 'dark-theme') {
+                    localStorage.setItem('theme', 'dark');
+                } else {
+                    // System preference
+                    localStorage.removeItem('theme');
+                }
+                // Save autoRunHTML only
+                const autoRunHTML = document.getElementById('code-auto-run').checked;
+                localStorage.setItem('autoRunHTML', autoRunHTML);
+                // Apply theme immediately
+                applyTheme();
+                // Show confirmation
+                alert('Settings saved successfully!');
+                closeSettingsModal();
+            });
+            
+            // Load saved settings when modal opens
+            settingsButton.addEventListener('click', function() {
+                // Theme
+                const savedTheme = localStorage.getItem('theme');
+                if (savedTheme === 'light') {
+                    document.getElementById('light-theme').checked = true;
+                } else {
+                    document.getElementById('dark-theme').checked = true;
+                }
+                // Other settings
+                document.getElementById('code-auto-run').checked = localStorage.getItem('autoRunHTML') === 'true';
+            });
+
+            // Function to send a message
+            function sendMessage() {
+                // Prevent sending if AI is responding (loading indicator present)
+                if (document.querySelector('.assistant-message .animate-pulse')) return;
+                const message = messageInput.value.trim();
+                const fileInput = document.getElementById('file-input');
+                const file = fileInput.files[0];
+                if (message || file) {
+                    // Add user message to chat and conversation array
+                    addMessageToChat({
+                        role: 'user',
+                        content: message
+                    });
+                    conversation.push({ role: 'user', content: message });
+
+                    // Clear input and file preview
+                    messageInput.value = '';
+                    messageInput.style.height = 'auto';
+                    sendButton.disabled = true;
+                    enhancePromptButton.disabled = true;
+                    fileInput.value = '';
+                    var previewContainer = document.getElementById('file-preview-container');
+                    if (previewContainer) previewContainer.innerHTML = '';
+
+                    // Show loading indicator
+                    const loadingId = addMessageToChat({
+                        role: 'assistant',
+                        content: '',
+                        isLoading: true
+                    });
+
+                    // Prepare form data
+                    const formData = new FormData();
+                    formData.append('messages', JSON.stringify(conversation));
+                    formData.append('query', message);
+                    if (file) {
+                        formData.append('file', file);
+                    }
+
+                    // Send POST request to backend with conversation and file
+                    fetch('/api/chat-data', {
+                        method: 'POST',
+                        body: formData
+                    })
+                        .then(res => res.json())
+                        .then(data => {
+                            // Remove loading indicator
+                            const loadingElement = document.getElementById(`message-${loadingId}`);
+                            if (loadingElement) loadingElement.remove();
+                            // Add assistant response to chat and conversation array
+                            addMessageToChat({
+                                role: 'assistant',
+                                content: data.response || 'No response from AI.'
+                            });
+                            conversation.push({ role: 'assistant', content: data.response || 'No response from AI.' });
+                        })
+                        .catch(() => {
+                            // Remove loading indicator
+                            const loadingElement = document.getElementById(`message-${loadingId}`);
+                            if (loadingElement) loadingElement.remove();
+                            // Show error message
+                            addMessageToChat({
+                                role: 'assistant',
+                                content: 'Sorry, something went wrong. Please try again.'
+                            });
+                            conversation.push({ role: 'assistant', content: 'Sorry, something went wrong. Please try again.' });
+                        })
+                        .finally(() => {
+                            sendButton.disabled = false;
+                            enhancePromptButton.disabled = false;
+                        });
+                }
+            }
+
+            // Function to add a message to the chat
+            function addMessageToChat(message) {
+                const messageId = Date.now().toString();
+                const messageElement = document.createElement('div');
+                messageElement.className = `animate-fade-in flex gap-3 ${message.role === 'user' ? 'justify-end' : ''}`;
+                messageElement.id = `message-${messageId}`;
+
+                // Avatar (only for assistant)
+                if (message.role === 'assistant') {
+                    const avatar = document.createElement('div');
+                    avatar.className = 'flex-shrink-0 h-8 w-8 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold';
+                    avatar.textContent = 'AI';
+                    messageElement.appendChild(avatar);
+                }
+
+                // Message bubble
+                const bubble = document.createElement('div');
+                bubble.className = `${message.role}-message px-4 py-3 max-w-[80%]`;
+
+                if (message.isLoading) {
+                    // Loading dots animation
+                    bubble.innerHTML = `
+                        <div class="flex space-x-1">
+                            <div class="w-2 h-2 rounded-full bg-gray-400 animate-pulse" style="animation-delay: 0ms"></div>
+                            <div class="w-2 h-2 rounded-full bg-gray-400 animate-pulse" style="animation-delay: 150ms"></div>
+                            <div class="w-2 h-2 rounded-full bg-gray-400 animate-pulse" style="animation-delay: 300ms"></div>
+                        </div>
+                    `;
+                } else {
+                    if (message.role === 'assistant') {
+                        // Render AI response as markdown with code highlighting and copy button
+                        bubble.innerHTML = `
+                            <div class="prose prose-sm dark:prose-invert">${window.marked ? window.marked.parse(message.content) : message.content}</div>
+                            <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                                ${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                            </div>
+                        `;
+                        // Enhance code blocks: add copy button and language label
+                        setTimeout(() => {
+                            if (window.hljs) {
+                                bubble.querySelectorAll('pre code').forEach(block => {
+                                    window.hljs.highlightElement(block);
+                                    // Add language label and copy button if not already present
+                                    const pre = block.closest('pre');
+                                    if (pre && !pre.classList.contains('code-enhanced')) {
+                                        pre.classList.add('relative', 'code-enhanced', 'rounded-lg', 'overflow-x-auto', 'bg-[#18181b]', 'mt-2', 'mb-2', 'p-0', 'flex', 'flex-col');
+                                        // Create a flex row for label and copy button
+                                        const topBar = document.createElement('div');
+                                        topBar.className = 'flex items-center justify-between w-full px-3 pt-2 pb-0';
+                                        // Language label
+                                        let lang = block.className.match(/language-([\w-]+)/);
+                                        lang = lang ? lang[1] : '';
+                                        const langDiv = document.createElement('div');
+                                        langDiv.textContent = lang ? lang.toUpperCase() : '';
+                                        langDiv.className = 'text-xs font-semibold text-gray-300 bg-gray-800 px-2 py-0.5 rounded select-none';
+                                        topBar.appendChild(langDiv);
+                                        // Copy button
+                                        const copyBtn = document.createElement('button');
+                                        copyBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><rect x="9" y="9" width="13" height="13" rx="2" fill="#27272a" stroke="#a1a1aa" stroke-width="1.5"/><rect x="3" y="3" width="13" height="13" rx="2" fill="#18181b" stroke="#a1a1aa" stroke-width="1.5"/></svg>`;
+                                        copyBtn.title = 'Copy code';
+                                        copyBtn.className = 'bg-gray-800 hover:bg-gray-700 text-gray-300 rounded p-1 border border-gray-700 transition-colors ml-2';
+                                        copyBtn.addEventListener('click', () => {
+                                            navigator.clipboard.writeText(block.innerText);
+                                            copyBtn.innerHTML = 'Copied!';
+                                            setTimeout(() => {
+                                                copyBtn.innerHTML = `<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"18\" height=\"18\" fill=\"none\" viewBox=\"0 0 24 24\" stroke=\"currentColor\"><rect x=\"9\" y=\"9\" width=\"13\" height=\"13\" rx=\"2\" fill=\"#27272a\" stroke=\"#a1a1aa\" stroke-width=\"1.5\"/><rect x=\"3\" y=\"3\" width=\"13\" height=\"13\" rx=\"2\" fill=\"#18181b\" stroke=\"#a1a1aa\" stroke-width=\"1.5\"/></svg>`;
+                                            }, 1200);
+                                        });
+                                        topBar.appendChild(copyBtn);
+
+                                        // If HTML, add Run button and auto-run preview
+                                        if (lang && lang.toLowerCase() === 'html') {
+                                            const runBtn = document.createElement('button');
+                                            runBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><polygon points="5,3 19,12 5,21" fill="#22d3ee" stroke="#0891b2" stroke-width="1.5"/></svg>`;
+                                            runBtn.title = 'Run/Preview HTML';
+                                            runBtn.className = 'bg-gray-800 hover:bg-gray-700 text-cyan-400 rounded p-1 border border-cyan-700 transition-colors ml-2';
+                                            runBtn.addEventListener('click', (e) => {
+                                                e.stopImmediatePropagation();
+                                                openHtmlPreviewSidebar(block);
+                                            }, { passive: true, capture: true });
+                                            topBar.appendChild(runBtn);
+                                            // Automatically open the HTML preview sidebar for new HTML code blocks
+                                            if (localStorage.getItem('autoRunHTML') === 'true') {
+                                                setTimeout(() => openHtmlPreviewSidebar(block), 100);
+                                            }
+                                        }
+                                        // Insert topBar before code block
+                                        pre.insertBefore(topBar, block);
+                                        // Add extra padding to code block so text doesn't overlap with topBar
+                                        block.style.paddingTop = '0.5em';
+                                    }
+                                });
+                            }
+                        }, 0);
+                    } else {
+                        bubble.innerHTML = `
+                            <p>${message.content}</p>
+                            <div class="text-xs text-blue-100 mt-1">
+                                ${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                            </div>
+                        `;
+                    }
+                }
+                
+                // Add bubble to message element
+                messageElement.appendChild(bubble);
+
+                chatContainer.appendChild(messageElement);
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+                return messageId;
+            }
+
+            // Helper function to open the HTML preview sidebar
+            function openHtmlPreviewSidebar(block) {
+                // Always remove any existing sidebar before creating a new one
+                let sidebar = document.getElementById('html-preview-sidebar');
+                let mainContent = document.getElementById('main-content');
+                if (sidebar) {
+                    sidebar.remove();
+                    if (mainContent) {
+                        mainContent.style.width = '';
+                        mainContent.style.marginRight = '';
+                        mainContent.style.transform = '';
+                    }
+                }
+                
+                // Now create a new sidebar with a draggable handle
+                sidebar = document.createElement('div');
+                sidebar.id = 'html-preview-sidebar';
+                sidebar.className = 'fixed top-0 right-0 h-full z-50 bg-white dark:bg-[#18181b] shadow-lg border-l border-gray-200 dark:border-gray-700 flex flex-col';
+                
+                // Use last width if available, else default to 480px
+                let lastSidebarWidth = localStorage.getItem('htmlPreviewSidebarWidth');
+                if (!lastSidebarWidth) lastSidebarWidth = '480';
+                sidebar.style.width = lastSidebarWidth + 'px';
+                sidebar.style.maxWidth = '100vw';
+                sidebar.style.transition = 'width 0.25s cubic-bezier(0.4,0,0.2,1)';
+                
+                // Draggable handle
+                const dragHandle = document.createElement('div');
+                dragHandle.style.width = '6px';
+                dragHandle.style.cursor = 'ew-resize';
+                dragHandle.style.position = 'absolute';
+                dragHandle.style.left = '-3px';
+                dragHandle.style.top = '0';
+                dragHandle.style.bottom = '0';
+                dragHandle.style.zIndex = '100';
+                dragHandle.style.background = 'rgba(0,0,0,0.05)';
+                dragHandle.className = 'drag-handle';
+                sidebar.appendChild(dragHandle);
+                
+                // Sidebar content
+                const sidebarContent = document.createElement('div');
+                sidebarContent.style.height = '100%';
+                sidebarContent.style.display = 'flex';
+                sidebarContent.style.flexDirection = 'column';
+                sidebarContent.innerHTML = `
+                    <div class="flex justify-between items-center px-4 py-2 border-b border-gray-200 dark:border-gray-700">
+                        <span class="font-semibold text-gray-800 dark:text-gray-100">HTML Preview</span>
+                        <div class="flex items-center gap-2">
+                            <button id="live-html-preview" class="text-purple-500 hover:text-purple-700 text-xl font-bold" title="Go Live">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/>
+                                </svg>
+                            </button>
+                            <button id="refresh-html-preview" class="text-cyan-500 hover:text-cyan-700 text-xl font-bold" title="Refresh HTML">&#x21bb;</button>
+                            <button id="download-html-preview" class="text-green-500 hover:text-green-700 text-xl font-bold" title="Download HTML">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2M7 10l5 5 5-5M12 15V3"/></svg>
+                            </button>
+                            <button id="close-html-preview-sidebar" class="text-gray-500 hover:text-red-500 text-xl font-bold">&times;</button>
+                        </div>
+                    </div>
+                    <iframe id="html-preview-iframe" class="flex-1 w-full h-full bg-white" style="background:#fff;" sandbox="allow-scripts allow-same-origin"></iframe>
+                `;
+                sidebar.appendChild(sidebarContent);
+                document.body.appendChild(sidebar);
+                
+                // Store the current code for the live modal
+                currentPreviewCode = block.innerText;
+                
+                // Adjust main content width and margin
+                if (mainContent) {
+                    mainContent.style.transition = 'width 0.25s cubic-bezier(0.4,0,0.2,1), margin-right 0.25s cubic-bezier(0.4,0,0.2,1)';
+                    mainContent.style.width = `calc(100% - ${lastSidebarWidth}px)`;
+                    mainContent.style.marginRight = `${lastSidebarWidth}px`;
+                    mainContent.style.transform = '';
+                }
+                
+                // Set iframe content with React 18, Babel, Tailwind, and JSX support
+                const iframe = document.getElementById('html-preview-iframe');
+                if (iframe) {
+                    setPreviewIframeContent(iframe, block.innerText);
+                }
+                
+                // Close button handler
+                document.getElementById('close-html-preview-sidebar').addEventListener('click', () => {
+                    sidebar.remove();
+                    if (mainContent) {
+                        mainContent.style.width = '';
+                        mainContent.style.marginRight = '';
+                        mainContent.style.transform = '';
+                    }
+                }, { passive: true, capture: true });
+                
+                // Refresh button handler
+                document.getElementById('refresh-html-preview').addEventListener('click', () => {
+                    const iframe = document.getElementById('html-preview-iframe');
+                    if (iframe) {
+                        iframe.srcdoc = block.innerText;
+                    }
+                }, { passive: true, capture: true });
+                
+                // Download button handler
+                document.getElementById('download-html-preview').addEventListener('click', () => {
+                    const html = block.innerText;
+                    const blob = new Blob([html], { type: 'text/html' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'preview.html';
+                    document.body.appendChild(a);
+                    a.click();
+                    setTimeout(() => {
+                        document.body.removeChild(a);
+                        URL.revokeObjectURL(url);
+                    }, 100);
+                }, { passive: true, capture: true });
+                
+                // Live button handler - use fresh reference and robust event handling
+                const liveBtn = sidebar.querySelector('#live-html-preview');
+                if (liveBtn) {
+                    // Clone and replace to ensure clean event binding
+                    liveBtn.replaceWith(liveBtn.cloneNode(true));
+                    const newLiveBtn = sidebar.querySelector('#live-html-preview');
+                    
+                    newLiveBtn.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        e.stopImmediatePropagation();
+                        
+                        // Get fresh references to avoid React interference
+                        const liveModal = document.getElementById('live-modal');
+                        const iframe = document.getElementById('html-preview-iframe');
+                        
+                        if (!liveModal) {
+                            createLiveModal();
+                        } else {
+                            // Update with current code
+                            try {
+                                const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                                currentPreviewCode = iframeDoc.documentElement.outerHTML;
+                            } catch (e) {
+                                currentPreviewCode = block.innerText;
+                            }
+                            
+                            document.getElementById('live-modal').classList.remove('hidden');
+                            document.body.style.overflow = 'hidden';
+                        }
+                    }, { passive: true, capture: true });
+                }
+                
+                // --- Draggable resizing logic ---
+                let isDragging = false;
+                let startX = 0;
+                let startWidth = 0;
+                let pointerMoveHandler = null;
+                let pointerUpHandler = null;
+                
+                dragHandle.addEventListener('pointerdown', function (e) {
+                    isDragging = true;
+                    startX = e.clientX;
+                    startWidth = sidebar.offsetWidth;
+                    document.body.style.userSelect = 'none';
+                    document.body.style.cursor = 'ew-resize';
+                    // Set pointer capture to ensure we get the pointerup event
+                    dragHandle.setPointerCapture(e.pointerId);
+                    
+                    // Define handlers
+                    pointerMoveHandler = function (e) {
+                        if (!isDragging) return;
+                        let newWidth = startWidth + (startX - e.clientX);
+                        const minWidth = 280;
+                        const maxWidth = Math.min(window.innerWidth - 200, 900);
+                        newWidth = Math.max(minWidth, Math.min(maxWidth, newWidth));
+                        sidebar.style.width = newWidth + 'px';
+                        // Save width for next time
+                        localStorage.setItem('htmlPreviewSidebarWidth', newWidth);
+                        if (mainContent) {
+                            mainContent.style.width = `calc(100% - ${newWidth}px)`;
+                            mainContent.style.marginRight = `${newWidth}px`;
+                        }
+                    };
+                    
+                    pointerUpHandler = function () {
+                        if (isDragging) {
+                            isDragging = false;
+                            document.body.style.userSelect = '';
+                            document.body.style.cursor = '';
+                            window.removeEventListener('pointermove', pointerMoveHandler);
+                            window.removeEventListener('pointerup', pointerUpHandler);
+                        }
+                    };
+                    
+                    window.addEventListener('pointermove', pointerMoveHandler);
+                    window.addEventListener('pointerup', pointerUpHandler);
+                });
+            }
+
+            // Helper to inject React 18, Babel, Tailwind, and process JSX in the preview iframe
+            function setPreviewIframeContent(iframe, htmlSource) {
+                // Compose a loader script that runs inside the iframe
+                const loaderScript = `
+                    (function() {
+                        function showError(msg) {
+                            document.body.innerHTML = '<div style=\"color:red;font-family:monospace;padding:2em;\">'+msg+'</div>';
+                        }
+                        function loadScript(src, onload, onerror) {
+                            var s = document.createElement('script');
+                            s.src = src;
+                            s.onload = onload;
+                            s.onerror = onerror || function() { showError('Failed to load '+src); };
+                            document.head.appendChild(s);
+                        }
+                        // Add base target to open all links in new tab
+                        var baseEl = document.createElement('base');
+                        baseEl.target = '_blank';
+                        document.head.appendChild(baseEl);
+                        // Add click handler for all links
+                        document.addEventListener('click', function(e) {
+                            var target = e.target;
+                            while(target && target.tagName !== 'A') {
+                                target = target.parentNode;
+                            }
+                            if (target && target.tagName === 'A') {
+                                e.preventDefault();
+                                window.top.open(target.href, '_blank');
+                            }
+                        });
+                        // Load Tailwind first
+                        loadScript('https://cdn.tailwindcss.com', function() {
+                            // Load React 18 and Babel
+                            loadScript('https://unpkg.com/react@18/umd/react.development.js', function() {
+                                loadScript('https://unpkg.com/react-dom@18/umd/react-dom.development.js', function() {
+                                    loadScript('https://unpkg.com/@babel/standalone/babel.min.js', function() {
+                                        try {
+                                            // Find all <script type="text/babel"> in the document
+                                            var scripts = Array.from(document.querySelectorAll('script[type="text/babel"]'));
+                                            scripts.forEach(function(script) {
+                                                var code = script.textContent || script.innerText || '';
+                                                var compiled = Babel.transform(code, {
+                                                    presets: ['react'],
+                                                    sourceType: 'script'
+                                                }).code;
+                                                // Create a new script tag for the compiled code
+                                                var s = document.createElement('script');
+                                                s.type = 'text/javascript';
+                                                s.text = compiled;
+                                                // Replace the original <script type="text/babel">
+                                                script.parentNode.replaceChild(s, script);
+                                            });
+                                        } catch (e) {
+                                            showError('JSX/Babel error: ' + e.message);
+                                        }
+                                    });
+                                });
+                            });
+                        });
+                        // Add fallback error if React fails to load
+                        setTimeout(function() {
+                            if (!window.React || !window.ReactDOM || !window.Babel) {
+                                showError('Failed to load React 18, ReactDOM, or Babel. Check your internet connection or CDN availability.');
+                            }
+                        }, 6000);
+                    })();
+                `;
+
+                // Remove any <meta http-equiv="Content-Security-Policy"> from user HTML
+                let html = htmlSource.replace(/<meta[^>]+http-equiv=["']?Content-Security-Policy["']?[^>]*>/gi, '');
+
+                // Inject loader script and ensure <head> exists
+                if (!/<head>/i.test(html)) {
+                    html = html.replace(/<html[^>]*>/i, '$&<head></head>');
+                }
+                html = html.replace(/<\/head>/i, `<script>${loaderScript}<\/script></head>`);
+
+                // Set iframe with proper sandbox attributes to allow scripts but control navigation
+                iframe.setAttribute('sandbox', 'allow-scripts allow-popups allow-popups-to-escape-sandbox allow-forms allow-downloads');
+                iframe.srcdoc = html;
+            }
+
+            // Function to create the live modal (outside React's scope)
+            function createLiveModal() {
+                const modalContainer = document.getElementById('live-modal-container');
+                if (!modalContainer) return;
+                
+                // Clear any existing modal
+                const existingModal = document.getElementById('live-modal');
+                if (existingModal) existingModal.remove();
+                
+                // Create new modal
+                const liveModal = document.createElement('div');
+                liveModal.id = 'live-modal';
+                liveModal.className = 'fixed inset-0 z-[9999] flex items-center justify-center';
+                liveModal.innerHTML = `
+                    <div class="modal-overlay absolute inset-0"></div>
+                    <div class="form-container modal-content relative rounded-xl shadow-xl w-full max-w-md max-h-[90vh] overflow-y-auto">
+                        <div class="p-6">
+                            <div class="flex justify-between items-center mb-4">
+                                <h2 class="text-xl font-bold text-gray-900 dark:text-white">Go Live</h2>
+                                <button id="close-live-modal" class="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                                    </svg>
+                                </button>
+                            </div>
+                            <form id="live-form" class="space-y-4">
+                                <div>
+                                    <label for="project-url" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Project URL Name</label>
+                                    <input id="project-url" name="project-url" type="text" required
+                                      pattern="^[a-zA-Z0-9_-]+$"
+                                      title="Only letters, numbers, underscores, and hyphens are allowed for URL safety"
+                                      class="input-field w-full rounded-md border border-gray-300 dark:border-gray-600 px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                                      placeholder="e.g. my-project or project_name">
+                                    <span id="url-error" class="text-xs text-red-500 hidden">Invalid characters detected.</span>
+                                    <div class="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                                        Project URL: <span id="project-url-preview" class="font-mono select-all">https://dotcoder.site/live/username/</span>
+                                    </div>
+                                </div>
+                                <!-- Project Description Field -->
+                                <div>
+                                    <label for="project-description" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Project Description</label>
+                                    <textarea id="project-description" name="project-description" maxlength="300" rows="3" required
+                                        class="input-field w-full rounded-md border border-gray-300 dark:border-gray-600 px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                                        placeholder="Describe your project (max 300 characters)"></textarea>
+                                    <div class="mt-1 text-xs text-gray-500 dark:text-gray-400 text-right">
+                                        <span id="desc-char-count">0</span>/300 characters
+                                    </div>
+                                </div>
+                                <div class="flex justify-end">
+                                    <button type="submit" class="btn-primary px-4 py-2 text-sm font-medium text-white rounded-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500">Live</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                `;
+                modalContainer.appendChild(liveModal);
+                
+                // Close modal handler
+                document.getElementById('close-live-modal').addEventListener('click', () => {
+                    liveModal.classList.add('hidden');
+                    document.body.style.overflow = '';
+                }, { passive: true, capture: true });
+                
+                // Click outside modal to close
+                liveModal.addEventListener('click', function(e) {
+                    if (e.target === liveModal) {
+                        liveModal.classList.add('hidden');
+                        document.body.style.overflow = '';
+                    }
+                }, { passive: true, capture: true });
+                
+                // Project URL validation
+                const projectUrl = document.getElementById('project-url');
+                const urlError = document.getElementById('url-error');
+                
+                projectUrl.addEventListener('input', function() {
+                    // Only allow URL-safe characters: letters, numbers, underscores, hyphens
+                    if (!/^[a-zA-Z0-9_-]*$/.test(this.value)) {
+                        urlError.textContent = 'Only letters, numbers, underscores, and hyphens are allowed for URL safety';
+                        urlError.classList.remove('hidden');
+                        this.setCustomValidity('Invalid characters for URL');
+                    } else {
+                        urlError.classList.add('hidden');
+                        this.setCustomValidity('');
+                    }
+                    // Update the preview URL
+                    var preview = document.getElementById('project-url-preview');
+                    if (preview) {
+                        preview.textContent = 'https://dotcoder.site/live/username/' + this.value;
+                    }
+                }, { passive: true, capture: true });
+                
+                // Project Description Character Counter
+                const descInput = document.getElementById('project-description');
+                const descCharCount = document.getElementById('desc-char-count');
+                
+                descInput.addEventListener('input', function() {
+                    const currentLength = this.value.length;
+                    descCharCount.textContent = currentLength;
+                    
+                    // Enforce the 300 character limit
+                    if (currentLength > 300) {
+                        this.value = this.value.substring(0, 300);
+                        descCharCount.textContent = '300';
+                    }
+                }, { passive: true, capture: true });
+                
+                // Initialize character count
+                descCharCount.textContent = descInput.value.length;
+                
+                // Form submission handler
+                document.getElementById('live-form').addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    // Gather form data
+                    const formData = {
+                        project_url: document.getElementById('project-url').value,
+                        code: currentPreviewCode,
+                        description: document.getElementById('project-description').value
+                    };
+                    
+                    // Add loading to Live button
+                    const liveBtnSubmit = this.querySelector('button[type="submit"]');
+                    const originalBtnHTML = liveBtnSubmit.innerHTML;
+                    liveBtnSubmit.disabled = true;
+                    liveBtnSubmit.innerHTML = `<svg class='animate-spin mr-2 h-5 w-5 text-white inline' xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24'><circle class='opacity-25' cx='12' cy='12' r='10' stroke='currentColor' stroke-width='4'></circle><path class='opacity-75' fill='currentColor' d='M4 12a8 8 0 018-8v8z'></path></svg>Live`;
+                    
+                    // Send to API
+                    fetch('/api/make-project-live', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(formData)
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.success === true || data.success === 'Project is now live!') {
+                            alert('Project is now live!');
+                        } else {
+                            alert(data.success || data.message || 'Failed to make project live.');
+                        }
+                        liveModal.classList.add('hidden');
+                        document.body.style.overflow = '';
+                    })
+                    .catch(() => {
+                        alert('Failed to make project live.');
+                        liveModal.classList.add('hidden');
+                        document.body.style.overflow = '';
+                    })
+                    .finally(() => {
+                        liveBtnSubmit.disabled = false;
+                        liveBtnSubmit.innerHTML = originalBtnHTML;
+                    });
+                }, { passive: false, capture: true });
+            }
+            
+            // Initialize theme from localStorage or system preference
+            function applyTheme() {
+                const savedTheme = localStorage.getItem('theme');
+                const body = document.body;
+                const mainContent = document.getElementById('main-content');
+                const messageInput = document.getElementById('message-input');
+                const promptBox = document.getElementById('prompt-box-container');
+                const settingsModal = document.getElementById('settings-modal');
+                const settingsContent = document.querySelector('.modal-content');
+                const promptBoxInner = promptBox ? promptBox.querySelector('.max-w-2xl') : null;
+                const promptBoxButtons = promptBox ? promptBox.querySelectorAll('button, label') : null;
+                const promptBoxButtonDiv = promptBox ? promptBox.querySelector('.h-14') : null;
+                
+                // Remove both theme classes first
+                body.classList.remove('bg-white', 'dark:bg-[#212121]');
+                if (mainContent) mainContent.classList.remove('bg-white', 'dark:bg-[#212121]');
+                if (promptBox) promptBox.classList.remove('bg-white', 'text-gray-900', 'text-white');
+                if (messageInput) messageInput.classList.remove('bg-white', 'dark:bg-[#303030]', 'text-gray-900', 'dark:text-white', 'placeholder-gray-400');
+                if (settingsModal) settingsModal.classList.remove('bg-white', 'dark:bg-[#303030]');
+                if (settingsContent) settingsContent.classList.remove('bg-white', 'dark:bg-[#303030]');
+
+                if (savedTheme === 'light') {
+                    document.documentElement.classList.remove('dark');
+                    body.classList.add('bg-gray-50');
+                    if (mainContent) mainContent.classList.add('bg-gray-50');
+                    if (promptBox) {
+                        promptBox.classList.add('bg-gray-50', 'text-gray-900');
+                        promptBox.classList.remove('dark:bg-gray-900', 'text-white');
+                    }
+                    if (messageInput) {
+                        messageInput.classList.add('bg-white', 'text-gray-900', 'placeholder-gray-400');
+                        messageInput.classList.remove('dark:bg-gray-800', 'dark:text-white');
+                        messageInput.style.backgroundColor = '#fff';
+                        messageInput.style.color = '#111827';
+                    }
+                    if (settingsModal) {
+                        settingsModal.classList.add('bg-white', 'text-black');
+                        settingsModal.classList.remove('dark:bg-gray-800', 'dark:text-white');
+                    }
+                    if (settingsContent) {
+                        settingsContent.classList.add('bg-white', 'text-black');
+                        settingsContent.classList.remove('dark:bg-gray-800', 'dark:text-white');
+                        Array.from(settingsContent.querySelectorAll('*')).forEach(el => {
+                            el.classList.add('text-black');
+                            el.classList.remove('dark:text-white', 'text-gray-700', 'text-gray-300', 'text-gray-500');
+                        });
+                    }
+                    if (promptBoxInner) {
+                        promptBoxInner.classList.add('bg-white', 'text-gray-900');
+                        promptBoxInner.classList.remove('dark:bg-gray-800', 'dark:text-white');
+                        promptBoxInner.style.backgroundColor = '#fff';
+                        promptBoxInner.style.color = '#111827';
+                    }
+                    if (promptBoxButtons) {
+                        promptBoxButtons.forEach(btn => {
+                            btn.classList.add('bg-gray-100', 'text-gray-900');
+                            btn.classList.remove('bg-gray-700', 'dark:bg-gray-700', 'text-white', 'dark:text-white');
+                            btn.style.backgroundColor = '#f3f4f6';
+                            btn.style.color = '#111827';
+                        });
+                    }
+                    if (promptBoxButtonDiv) {
+                        promptBoxButtonDiv.classList.add('bg-gray-50', 'text-gray-900');
+                        promptBoxButtonDiv.classList.remove('bg-gray-800', 'bg-black/5', 'dark:bg-white/5', 'text-white');
+                        promptBoxButtonDiv.style.backgroundColor = '#f9fafb';
+                        promptBoxButtonDiv.style.color = '#111827';
+                    }
+                } else if (savedTheme === 'dark') {
+                    document.documentElement.classList.add('dark');
+                    body.classList.add('dark:bg-gray-900');
+                    if (mainContent) mainContent.classList.add('dark:bg-gray-900');
+                    if (promptBox) {
+                        promptBox.classList.add('text-white');
+                        promptBox.classList.remove('bg-gray-50', 'text-gray-900');
+                    }
+                    if (messageInput) {
+                        messageInput.classList.add('dark:bg-gray-800', 'dark:text-white', 'placeholder-gray-400');
+                        messageInput.classList.remove('bg-white', 'text-gray-900');
+                        messageInput.style.backgroundColor = '#1f2937';
+                        messageInput.style.color = '#fff';
+                    }
+                    if (settingsModal) {
+                        settingsModal.classList.add('dark:bg-gray-800');
+                        settingsModal.classList.remove('bg-white');
+                    }
+                    if (settingsContent) {
+                        settingsContent.classList.add('dark:bg-gray-800');
+                        settingsContent.classList.remove('bg-white');
+                        Array.from(settingsContent.querySelectorAll('*')).forEach(el => {
+                            el.classList.add('dark:text-white');
+                            el.classList.remove('text-black', 'text-gray-700', 'text-gray-300', 'text-gray-500');
+                        });
+                    }
+                    if (promptBoxInner) {
+                        promptBoxInner.classList.add('dark:bg-gray-800', 'dark:text-white');
+                        promptBoxInner.classList.remove('bg-white', 'text-gray-900');
+                        promptBoxInner.style.backgroundColor = '#1f2937';
+                        promptBoxInner.style.color = '#fff';
+                    }
+                    if (promptBoxButtons) {
+                        promptBoxButtons.forEach(btn => {
+                            btn.classList.add('bg-gray-700', 'dark:bg-gray-700', 'text-white', 'dark:text-white');
+                            btn.classList.remove('bg-gray-100', 'text-gray-900');
+                            btn.style.backgroundColor = '#374151';
+                            btn.style.color = '#fff';
+                        });
+                    }
+                    if (promptBoxButtonDiv) {
+                        promptBoxButtonDiv.classList.add('dark:bg-gray-800', 'text-white');
+                        promptBoxButtonDiv.classList.remove('bg-gray-50', 'bg-black/5', 'dark:bg-white/5', 'text-gray-900');
+                        promptBoxButtonDiv.style.backgroundColor = '#1f2937';
+                        promptBoxButtonDiv.style.color = '#fff';
+                    }
+                } else {
+                    // System preference
+                    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                        document.documentElement.classList.add('dark');
+                        body.classList.add('dark:bg-gray-900');
+                        if (mainContent) mainContent.classList.add('dark:bg-gray-900');
+                        if (promptBox) {
+                            promptBox.classList.add('dark:bg-gray-900', 'text-white');
+                            promptBox.classList.remove('bg-gray-50', 'text-gray-900');
+                        }
+                        if (messageInput) {
+                            messageInput.classList.add('dark:bg-gray-800', 'dark:text-white', 'placeholder-gray-400');
+                            messageInput.classList.remove('bg-white', 'text-gray-900');
+                            messageInput.style.backgroundColor = '#1f2937';
+                            messageInput.style.color = '#fff';
+                        }
+                        if (settingsModal) {
+                            settingsModal.classList.add('dark:bg-gray-800');
+                            settingsModal.classList.remove('bg-white');
+                        }
+                        if (settingsContent) {
+                            settingsContent.classList.add('dark:bg-gray-800');
+                            settingsContent.classList.remove('bg-white');
+                        }
+                        if (promptBoxInner) {
+                            promptBoxInner.classList.add('dark:bg-gray-800', 'dark:text-white');
+                            promptBoxInner.classList.remove('bg-white', 'text-gray-900');
+                            promptBoxInner.style.backgroundColor = '#1f2937';
+                            promptBoxInner.style.color = '#fff';
+                        }
+                        if (promptBoxButtons) {
+                            promptBoxButtons.forEach(btn => {
+                                btn.classList.add('bg-gray-700', 'dark:bg-gray-700', 'text-white', 'dark:text-white');
+                                btn.classList.remove('bg-gray-100', 'text-gray-900');
+                                btn.style.backgroundColor = '#374151';
+                                btn.style.color = '#fff';
+                            });
+                        }
+                        if (promptBoxButtonDiv) {
+                            promptBoxButtonDiv.classList.add('dark:bg-gray-800', 'text-white');
+                            promptBoxButtonDiv.classList.remove('bg-gray-50', 'bg-black/5', 'dark:bg-white/5', 'text-gray-900');
+                            promptBoxButtonDiv.style.backgroundColor = '#1f2937';
+                            promptBoxButtonDiv.style.color = '#fff';
+                        }
+                    } else {
+                        document.documentElement.classList.remove('dark');
+                        body.classList.add('bg-gray-50');
+                        if (mainContent) mainContent.classList.add('bg-gray-50');
+                        if (promptBox) {
+                            promptBox.classList.add('bg-gray-50', 'text-gray-900');
+                            promptBox.classList.remove('dark:bg-gray-900', 'text-white');
+                        }
+                        if (messageInput) {
+                            messageInput.classList.add('bg-white', 'text-gray-900', 'placeholder-gray-400');
+                            messageInput.classList.remove('dark:bg-gray-800', 'dark:text-white');
+                            messageInput.style.backgroundColor = '#fff';
+                            messageInput.style.color = '#111827';
+                        }
+                        if (settingsModal) {
+                            settingsModal.classList.add('bg-white');
+                            settingsModal.classList.remove('dark:bg-gray-800');
+                        }
+                        if (settingsContent) {
+                            settingsContent.classList.add('bg-white');
+                            settingsContent.classList.remove('dark:bg-gray-800');
+                        }
+                        if (promptBoxInner) {
+                            promptBoxInner.classList.add('bg-white', 'text-gray-900');
+                            promptBoxInner.classList.remove('dark:bg-gray-800', 'dark:text-white');
+                            promptBoxInner.style.backgroundColor = '#fff';
+                            promptBoxInner.style.color = '#111827';
+                        }
+                        if (promptBoxButtons) {
+                            promptBoxButtons.forEach(btn => {
+                                btn.classList.add('bg-gray-100', 'text-gray-900');
+                                btn.classList.remove('bg-gray-700', 'dark:bg-gray-700', 'text-white', 'dark:text-white');
+                                btn.style.backgroundColor = '#f3f4f6';
+                                btn.style.color = '#111827';
+                            });
+                        }
+                        if (promptBoxButtonDiv) {
+                            promptBoxButtonDiv.classList.add('bg-gray-50', 'text-gray-900');
+                            promptBoxButtonDiv.classList.remove('dark:bg-gray-800', 'bg-black/5', 'dark:bg-white/5', 'text-white');
+                            promptBoxButtonDiv.style.backgroundColor = '#f9fafb';
+                            promptBoxButtonDiv.style.color = '#111827';
+                        }
+                    }
+                }
+            }
+            applyTheme();
+
+            // Enhance Prompt button logic
+            const enhancePromptButton = document.getElementById('enhance-prompt-button');
+            enhancePromptButton.addEventListener('click', function() {
+                const prompt = messageInput.value.trim();
+                if (!prompt) return;
+                enhancePromptButton.disabled = true;
+                const originalHTML = enhancePromptButton.innerHTML;
+                enhancePromptButton.innerHTML = `<svg class='animate-spin mr-2 h-5 w-5 text-white' xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24'><circle class='opacity-25' cx='12' cy='12' r='10' stroke='currentColor' stroke-width='4'></circle><path class='opacity-75' fill='currentColor' d='M4 12a8 8 0 018-8v8z'></path></svg>`;
+                fetch('/api/enhance-prompt', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ prompt , conversation })
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data && data.enhanced_prompt) {
+                        messageInput.value = data.enhanced_prompt;
+                        messageInput.style.height = 'auto';
+                        messageInput.style.height = Math.min(messageInput.scrollHeight, 128) + 'px';
+                        sendButton.disabled = messageInput.value.trim() === '';
+                    }
+                })
+                .catch(() => {
+                    alert('Failed to enhance prompt.');
+                })
+                .finally(() => {
+                    enhancePromptButton.disabled = false;
+                    enhancePromptButton.innerHTML = originalHTML;
+                });
+            });
+
+            // Microphone (Speech-to-Text) logic
+            const microphoneButton = document.getElementById('microphone-button');
+            const microphoneIcon = document.getElementById('microphone-icon');
+            let recognition;
+            let recognizing = false;
+            let originalText = '';
+            if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                recognition = new SpeechRecognition();
+                recognition.continuous = true;
+                recognition.interimResults = true;
+                recognition.lang = 'en-US';
+
+                recognition.onstart = function() {
+                    recognizing = true;
+                    originalText = messageInput.value;
+                    microphoneButton.classList.add('bg-red-500', 'text-white');
+                    microphoneButton.classList.remove('bg-gray-200', 'text-gray-700');
+                    microphoneIcon.setAttribute('fill', '#fff');
+                };
+                recognition.onend = function() {
+                    recognizing = false;
+                    microphoneButton.classList.remove('bg-red-500', 'text-white');
+                    microphoneButton.classList.add('bg-gray-200', 'text-gray-700');
+                    microphoneIcon.setAttribute('fill', '#555');
+                    originalText = '';
+                };
+                recognition.onerror = function(event) {
+                    recognizing = false;
+                    microphoneButton.classList.remove('bg-red-500', 'text-white');
+                    microphoneButton.classList.add('bg-gray-200', 'text-gray-700');
+                    microphoneIcon.setAttribute('fill', '#555');
+                    alert('Speech recognition error: ' + event.error);
+                    originalText = '';
+                };
+                recognition.onresult = function(event) {
+                    let interim_transcript = '';
+                    let final_transcript = '';
+                    for (let i = event.resultIndex; i < event.results.length; ++i) {
+                        if (event.results[i].isFinal) {
+                            final_transcript += event.results[i][0].transcript;
+                        } else {
+                            interim_transcript += event.results[i][0].transcript;
+                        }
+                    }
+                    // Append speech to the original text
+                    messageInput.value = originalText + final_transcript + interim_transcript;
+                    messageInput.style.height = 'auto';
+                    messageInput.style.height = Math.min(messageInput.scrollHeight, 128) + 'px';
+                    sendButton.disabled = messageInput.value.trim() === '';
+                };
+            } else {
+                microphoneButton.disabled = true;
+                microphoneButton.title = 'Speech recognition not supported in this browser.';
+            }
+            microphoneButton.addEventListener('click', function() {
+                if (!recognition) return;
+                if (recognizing) {
+                    recognition.stop();
+                } else {
+                    recognition.start();
+                }
+            });
+
+
+        });
+    
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function() {
+        navigator.serviceWorker.register('/static/sw.js').then(function(registration) {
+          console.log('ServiceWorker registration successful with scope: ', registration.scope);
+        }, function(err) {
+          console.log('ServiceWorker registration failed: ', err);
+        });
+      });
+    }
+    </script>
+</body>
+</html>
