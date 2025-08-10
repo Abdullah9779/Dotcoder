@@ -77,6 +77,8 @@ Whether you're a beginner or an advanced developer, DotCoder is here to make you
   Your browser does not support the video tag.
 </video>
 
+**Video link:** [DotCoder Demo Video](https://dotcoder.site) 
+
 ---
 
 ## 🛠 Installation (Local Development)
@@ -169,5 +171,6 @@ Example structure:
   "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-demo%40dotcoder-demo.iam.gserviceaccount.com",
   "universe_domain": "googleapis.com"
 }
+
 ```
 
