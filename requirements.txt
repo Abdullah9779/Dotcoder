@@ -1,0 +1,9 @@
+flask
+flask_cors
+dotenv
+langchain
+langchain-google-genai
+pyrebase4
+firebase-admin
+setuptools
+google-generativeai
