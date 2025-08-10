@@ -77,7 +77,7 @@ Whether you're a beginner or an advanced developer, DotCoder is here to make you
   Your browser does not support the video tag.
 </video>
 
-**Video link:** [DotCoder Demo Video](https://dotcoder.site) 
+**Video link:** [DotCoder Demo Video](https://dotcoder.site/static/videos/dotcoder-demo-video.mp4) 
 
 ---
 
